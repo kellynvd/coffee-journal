@@ -1,0 +1,26 @@
+definitions:
+  RecipeDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      coffeeAmount:
+        type: integer
+      yield:
+        type: integer
+      temperature:
+        type: integer
+      grinderSetting:
+        type: integer
+      preInfusionTime:
+        type: integer
+      brewTime:
+        type: integer
+      flavorRange:
+        type: integer
+      coffee:
+        type: string
+      grinder:
+        type: string
