@@ -37,7 +37,7 @@ describe('RecipeController', () => {
 
   describe('POST /api/recipes', () => {
     it('creates recipe', async () => {
-      const { request } = controls;
+      const { request, registry: { recipeRepository } } = controls;
 
       return request()
         .post('/api/recipes')
@@ -66,6 +66,22 @@ describe('RecipeController', () => {
             coffee: 'Raro',
             grinder: 'Kingrinder K2'
           }));
+
+          const recipe = await recipeRepository.findById(res.body.id);
+
+          expect(recipe).toEqual(
+            expect.objectContaining({
+              coffeeAmount: 18,
+              yield: 36,
+              temperature: 92,
+              grinderSetting: 50,
+              preInfusionTime: 10,
+              brewTime: 30,
+              flavorRange: 5,
+              coffee: 'Raro',
+              grinder: 'Kingrinder K2'
+            })
+          );
         });
     });
   })

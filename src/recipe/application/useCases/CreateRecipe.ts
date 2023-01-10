@@ -1,6 +1,10 @@
 import { Recipe } from '@/recipe/domain/Recipe';
-import { RecipeIdProvider } from '@/recipe/infrastructure/RecipeIdProvider';
+import { RecipeRepository } from '@/recipe/domain/RecipeRepository';
 import { ApplicationService } from '@/_lib/DDD';
+
+type Dependencies = {
+  recipeRepository: RecipeRepository;
+};
 
 type CreateRecipeDTO = {
   coffeeAmount: number;
@@ -16,8 +20,8 @@ type CreateRecipeDTO = {
 
 type CreateRecipe = ApplicationService<CreateRecipeDTO, Recipe.Type>;
 
-const makeCreateRecipe = (): CreateRecipe => async (payload: CreateRecipeDTO) => {
-  const id = RecipeIdProvider.create('c0612340-8fbe-46ab-b08d-8476dd2519d8')
+const makeCreateRecipe = ({ recipeRepository }: Dependencies): CreateRecipe => async (payload: CreateRecipeDTO) => {
+  const id = await recipeRepository.getNextId();
 
   const recipe = Recipe.create({
     id,
@@ -30,7 +34,9 @@ const makeCreateRecipe = (): CreateRecipe => async (payload: CreateRecipeDTO) =>
     flavorRange: payload.flavorRange,
     coffee: payload.coffee,
     grinder: payload.grinder,
-  })
+  });
+
+  await recipeRepository.store(recipe);
 
   return recipe;
 }
