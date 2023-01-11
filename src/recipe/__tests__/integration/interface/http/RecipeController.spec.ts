@@ -1,3 +1,4 @@
+import { Recipe } from '@/recipe/domain/Recipe';
 import { makeTestControls, TestControls } from '@/__tests__/TestControls';
 
 describe('RecipeController', () => {
@@ -9,7 +10,22 @@ describe('RecipeController', () => {
 
   describe('GET /api/recipes', () => {
     it('returns recipes', async () => {
-      const { request } = controls;
+      const { request, registry: { recipeRepository } } = controls;
+
+      const recipe = Recipe.create({
+        id: await recipeRepository.getNextId(),
+        coffeeAmount: 18,
+        yield: 36,
+        temperature: 92,
+        grinderSetting: 50,
+        preInfusionTime: 10,
+        brewTime: 30,
+        flavorRange: 5,
+        coffee: 'Raro',
+        grinder: 'Kingrinder K2'
+      });
+
+      await recipeRepository.store(recipe);
 
       return request()
         .get('/api/recipes')
@@ -18,7 +34,7 @@ describe('RecipeController', () => {
           expect(res.body).toEqual(expect.objectContaining({
             data: [
               {
-                id: 'c0612340-8fbe-46ab-b08d-8476dd2519d8',
+                id: recipe.id.value,
                 coffeeAmount: 18,
                 yield: 36,
                 temperature: 92,

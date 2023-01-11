@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Recipe } from '@/recipe/domain/Recipe';
 import { RecipeId } from '@/recipe/domain/RecipeId';
 import { RecipeRepository } from '@/recipe/domain/RecipeRepository';
@@ -8,7 +9,7 @@ const RECIPES: Array<Recipe.Type> = [];
 
 const makeInMemoryRecipeRepository = (): RecipeRepository => ({
   async getNextId(): Promise<RecipeId> {
-    return Promise.resolve(RecipeIdProvider.create('c0612340-8fbe-46ab-b08d-8476dd2519d8'));
+    return Promise.resolve(RecipeIdProvider.create(uuidv4()));
   },
 
   async store(entity: Recipe.Type): Promise<void> {
