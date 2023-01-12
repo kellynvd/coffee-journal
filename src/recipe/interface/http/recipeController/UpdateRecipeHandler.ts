@@ -1,7 +1,12 @@
+import { UpdateRecipe } from '@/recipe/application/useCases/UpdateRecipe';
 import { handler } from '@/_lib/http/handler';
 import { HttpStatus } from '@/_lib/http/HttpStatus';
 
-const updateRecipeHandler = handler(() => async (req, res) => {
+type Dependencies = {
+  updateRecipe: UpdateRecipe;
+}
+
+const updateRecipeHandler = handler(({ updateRecipe }: Dependencies ) => async (req, res) => {
   const { id } = req.params;
   const {
     coffeeAmount,
@@ -15,7 +20,7 @@ const updateRecipeHandler = handler(() => async (req, res) => {
     grinder,
   } = req.body;
 
-  const recipe = {
+  const recipe = await updateRecipe({
     id,
     coffeeAmount,
     yield: brewYield,
@@ -26,9 +31,11 @@ const updateRecipeHandler = handler(() => async (req, res) => {
     flavorRange,
     coffee,
     grinder,
-  };
+  })
 
-  res.status(HttpStatus.OK).json(recipe);
+  const serializedRecipe = { ...recipe, id: recipe.id.value };
+
+  res.status(HttpStatus.OK).json(serializedRecipe);
 });
 
 export { updateRecipeHandler };

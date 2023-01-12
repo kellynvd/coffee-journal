@@ -136,7 +136,6 @@ describe('RecipeController', () => {
         })
         .expect(async (res) => {
           expect(res.status).toBe(200);
-          console.log('>>>>> ERORO')
           expect(res.body).toEqual(expect.objectContaining({
             id: recipe.id.value,
             coffeeAmount: 17,
@@ -150,21 +149,21 @@ describe('RecipeController', () => {
             grinder: 'Kingrinder K4'
           }));
 
-          // const updatedRecipe = await recipeRepository.findById(res.body.id);
+          const updatedRecipe = await recipeRepository.findById(res.body.id);
 
-          // expect(updatedRecipe).toEqual(
-          //   expect.objectContaining({
-          //     ccoffeeAmount: 17,
-          //     yield: 34,
-          //     temperature: 91,
-          //     grinderSetting: 51,
-          //     preInfusionTime: 12,
-          //     brewTime: 40,
-          //     flavorRange: 7,
-          //     coffee: 'Cyborg',
-          //     grinder: 'Kingrinder K4'
-          //   })
-          // );
+          expect(updatedRecipe).toEqual(
+            expect.objectContaining({
+              coffeeAmount: 17,
+              yield: 34,
+              temperature: 91,
+              grinderSetting: 51,
+              preInfusionTime: 12,
+              brewTime: 40,
+              flavorRange: 7,
+              coffee: 'Cyborg',
+              grinder: 'Kingrinder K4'
+            })
+          );
         });
     });
   })

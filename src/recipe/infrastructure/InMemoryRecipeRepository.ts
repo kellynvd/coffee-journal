@@ -15,6 +15,14 @@ const makeInMemoryRecipeRepository = (): RecipeRepository => ({
   async store(entity: Recipe.Type): Promise<void> {
     RecipeIdProvider.validate(entity.id);
 
+    const index = RECIPES.findIndex((recipe) => recipe.id.value === entity.id.value);
+
+    if (index >= 0) {
+      RECIPES[index] = entity;
+
+      return;
+    }
+
     RECIPES.push(entity);
   },
 

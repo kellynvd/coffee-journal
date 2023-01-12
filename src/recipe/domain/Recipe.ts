@@ -41,6 +41,11 @@ namespace Recipe {
     grinder: props.grinder,
   })
 
+  export const update = (self: Recipe, props: Omit<RecipeProps, 'id'>): Recipe => ({
+    ...self,
+    ...props,
+  })
+
   export type Type = Recipe;
 }
 
